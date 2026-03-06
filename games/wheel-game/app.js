@@ -380,6 +380,11 @@ rejectBtn.onclick = () => {
   saveStats(stats);
   updateScore();
 
+  // 🔥 SCĂDEM ȘI DIN GLOBAL SCORE
+  if (typeof addGlobalPoint === "function") {
+    addGlobalPoint(currentPlayer, "wheel", -1);
+  }
+
   resultOverlay.classList.add("hidden");
 
 };
