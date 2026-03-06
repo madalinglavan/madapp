@@ -392,17 +392,17 @@ window.addEventListener("load", () => {
   }
 );
 const avatarMaleList = [
-  "/images/avatars/male/m1.png",
-  "/images/avatars/male/m2.png",
-  "/images/avatars/male/m3.png",
-  "/images/avatars/male/m4.png"
+  "images/avatars/male/m1.png",
+  "images/avatars/male/m2.png",
+  "images/avatars/male/m3.png",
+  "images/avatars/male/m4.png"
 ];
 
 const avatarFemaleList = [
-  "/images/avatars/female/f1.png",
-  "/images/avatars/female/f2.png",
-  "/images/avatars/female/f3.png",
-  "/images/avatars/female/f4.png"
+  "images/avatars/female/f1.png",
+  "images/avatars/female/f2.png",
+  "images/avatars/female/f3.png",
+  "images/avatars/female/f4.png"
 ];
 
 const avatarSelectHe = document.getElementById("avatarSelectHe");
