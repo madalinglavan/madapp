@@ -139,3 +139,28 @@ function updateGlobalNames() {
   heBox.innerHTML = `${names.he} <span id="globalHe">${stats.he.score}</span>`;
   sheBox.innerHTML = `${names.she} <span id="globalShe">${stats.she.score}</span>`;
 }
+
+/*************************
+ * GLOBAL AVATAR LOADER
+ *************************/
+function loadPlayerAvatars() {
+
+  let savedHe = localStorage.getItem("avatarHe");
+  let savedShe = localStorage.getItem("avatarShe");
+
+  // corectează path pentru jocuri din subfoldere
+  if (savedHe && !savedHe.startsWith("data:") && !savedHe.startsWith("http")) {
+    savedHe = "../../" + savedHe;
+  }
+
+  if (savedShe && !savedShe.startsWith("data:") && !savedShe.startsWith("http")) {
+    savedShe = "../../" + savedShe;
+  }
+
+  const avatarHe = document.getElementById("avatarHe");
+  const avatarShe = document.getElementById("avatarShe");
+
+  if (savedHe && avatarHe) avatarHe.src = savedHe;
+  if (savedShe && avatarShe) avatarShe.src = savedShe;
+
+}
