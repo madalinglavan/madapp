@@ -528,3 +528,5 @@ function autoFullscreen() {
 
 /* fullscreen pornește la primul click/touch */
 document.addEventListener("pointerdown", autoFullscreen, { once: true });
+
+loadPlayerAvatars();

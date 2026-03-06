@@ -4,11 +4,6 @@
 const avatarHe = document.getElementById("avatarHe");
 const avatarShe = document.getElementById("avatarShe");
 
-const savedHe = localStorage.getItem("avatarHe");
-const savedShe = localStorage.getItem("avatarShe");
-
-if (savedHe) avatarHe.src = savedHe;
-if (savedShe) avatarShe.src = savedShe;
 const boardEl = document.getElementById("board");
 const statusEl = document.getElementById("status");
 const restartBtn = document.getElementById("restartBtn");
@@ -27,6 +22,10 @@ const giftOverlay = document.getElementById("giftOverlay");
 const giftTitle = document.getElementById("giftTitle");
 const giftTextEl = document.getElementById("giftText");
 const closeGiftOverlay = document.getElementById("closeGiftOverlay");
+
+loadPlayerAvatars();
+
+
 
 
 /***********************
@@ -301,3 +300,4 @@ function autoFullscreen() {
 
 /* fullscreen pornește la primul click/touch */
 document.addEventListener("pointerdown", autoFullscreen, { once: true });
+

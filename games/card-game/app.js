@@ -70,13 +70,22 @@ const avatarShe = document.getElementById("avatarShe");
 
 
 function loadAvatars() {
-  const savedHe = localStorage.getItem("avatarHe");
-  const savedShe = localStorage.getItem("avatarShe");
 
-  if (savedHe && avatarHe) avatarHe.src = savedHe;
-  if (savedShe && avatarShe) avatarShe.src = savedShe;
+  let savedHe = localStorage.getItem("avatarHe");
+  let savedShe = localStorage.getItem("avatarShe");
+
+  if(savedHe && !savedHe.startsWith("data:") && !savedHe.startsWith("http")){
+    savedHe = "../../" + savedHe;
+  }
+
+  if(savedShe && !savedShe.startsWith("data:") && !savedShe.startsWith("http")){
+    savedShe = "../../" + savedShe;
+  }
+
+  if(savedHe && avatarHe) avatarHe.src = savedHe;
+  if(savedShe && avatarShe) avatarShe.src = savedShe;
+
 }
-
 
 /***********************
  * SOUND SYSTEM
@@ -532,12 +541,12 @@ function showThankPopup(text = "😏 bună alegere!", duration = 1500) {
 window.addEventListener("load", () => {
 
   ensureNamesExist();
-
+loadAvatars();
   setTimeout(() => {
     loader.style.display = "none";
     menu.style.display = "flex";
 
-    loadAvatars();
+    
     updateScore();
     updateLeader();
     renderBoard();
@@ -584,3 +593,6 @@ function autoFullscreen() {
 
 /* fullscreen pornește la primul click/touch */
 document.addEventListener("pointerdown", autoFullscreen, { once: true });
+
+loadPlayerAvatars();
+
