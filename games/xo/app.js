@@ -4,6 +4,11 @@
 const avatarHe = document.getElementById("avatarHe");
 const avatarShe = document.getElementById("avatarShe");
 
+const savedHe = localStorage.getItem("avatarHe");
+const savedShe = localStorage.getItem("avatarShe");
+
+if (savedHe) avatarHe.src = savedHe;
+if (savedShe) avatarShe.src = savedShe;
 const boardEl = document.getElementById("board");
 const statusEl = document.getElementById("status");
 const restartBtn = document.getElementById("restartBtn");
@@ -22,10 +27,12 @@ const giftOverlay = document.getElementById("giftOverlay");
 const giftTitle = document.getElementById("giftTitle");
 const giftTextEl = document.getElementById("giftText");
 const closeGiftOverlay = document.getElementById("closeGiftOverlay");
+const soundMove = new Audio("sounds/click.mp3");
+const soundWin = new Audio("sounds/win.mp3");
+const soundSwitch = new Audio("sounds/switch.mp3");
+const soundGift = new Audio("sounds/gift.mp3");
 
 loadPlayerAvatars();
-
-
 
 
 /***********************
@@ -95,6 +102,7 @@ function init() {
 
   updateStatus();
   updateScore();
+  updateActivePlayerUI();
 }
 function updateStatus() {
   const names = getCoupleNames();
@@ -109,6 +117,8 @@ function updateStatus() {
  * MOVE
  ***********************/
 function handleMove(e) {
+  soundMove.currentTime = 0;
+  soundMove.play().catch(()=>{});
   if (!gameActive) return;
 
   const index = e.currentTarget.dataset.index;
@@ -140,6 +150,8 @@ function handleMove(e) {
 }
 
 function handleWin() {
+  soundWin.currentTime = 0;
+soundWin.play().catch(()=>{});
   gameActive = false;
 
   const { he, she } = getCoupleNames();
@@ -167,16 +179,28 @@ function handleWin() {
  * WIN CHECK
  ***********************/
 function checkWin() {
+
   const wins = [
     [0,1,2],[3,4,5],[6,7,8],
     [0,3,6],[1,4,7],[2,5,8],
     [0,4,8],[2,4,6]
   ];
-  return wins.some(combo =>
-    combo.every(i => board[i] === currentPlayer)
-  );
-}
 
+  for (const combo of wins) {
+
+    if (combo.every(i => board[i] === currentPlayer)) {
+
+      combo.forEach(i => {
+        boardEl.children[i].classList.add("win");
+      });
+
+      return true;
+    }
+
+  }
+
+  return false;
+}
 /***********************
  * GIFT
  ***********************/
@@ -210,12 +234,25 @@ closeGiftOverlay.onclick = () => {
  * SWITCH PLAYER
  ***********************/
 switchBtn.onclick = () => {
+
   currentPlayer = currentPlayer === "he" ? "she" : "he";
+
   switchBtn.innerHTML =
     currentPlayer === "he"
       ? '<i class="fa-solid fa-mars"></i>'
       : '<i class="fa-solid fa-venus"></i>';
+
   updateStatus();
+  updateActivePlayerUI();
+
+  const activeItem = document.querySelector(".score-item.active");
+
+  activeItem.classList.add("switch-flash");
+
+  setTimeout(()=>{
+    activeItem.classList.remove("switch-flash");
+  },500);
+
 };
 
 /***********************
@@ -267,37 +304,34 @@ window.addEventListener("load", () => {
 
 
 
-
 /*************************
- * AUTO FULLSCREEN SYSTEM
+ * AUTO FULLSCREEN
  *************************/
 
-function enterFullscreen() {
-
-  const el = document.documentElement;
-
-  if (el.requestFullscreen) {
-    el.requestFullscreen();
-  } else if (el.webkitRequestFullscreen) {
-    el.webkitRequestFullscreen();
-  } else if (el.msRequestFullscreen) {
-    el.msRequestFullscreen();
-  }
-
-}
-
 function autoFullscreen() {
+  if (
+    localStorage.getItem("pb_fullscreen") === "true" &&
+    !document.fullscreenElement
+  ) {
+    document.documentElement.requestFullscreen().catch(() => {});
+  }
+}
 
-  if (localStorage.getItem("pb_fullscreen") === "true") {
+document.addEventListener("DOMContentLoaded", autoFullscreen);
 
-    if (!document.fullscreenElement) {
-      enterFullscreen();
-    }
 
+function updateActivePlayerUI(){
+
+  const heItem = document.querySelector(".score-item.he");
+  const sheItem = document.querySelector(".score-item.she");
+
+  heItem.classList.remove("active");
+  sheItem.classList.remove("active");
+
+  if(currentPlayer === "he"){
+    heItem.classList.add("active");
+  }else{
+    sheItem.classList.add("active");
   }
 
 }
-
-/* fullscreen pornește la primul click/touch */
-document.addEventListener("pointerdown", autoFullscreen, { once: true });
-
