@@ -76,7 +76,15 @@ function loadAvatars() {
 
   if (avatarHe) avatarHe.src = savedHe;
   if (avatarShe) avatarShe.src = savedShe;
+if (!savedHe) {
+  savedHe = "/images/avatars/male/m1.png";
+  localStorage.setItem("avatarHe", savedHe);
+}
 
+if (!savedShe) {
+  savedShe = "/images/avatars/female/f1.png";
+  localStorage.setItem("avatarShe", savedShe);
+}
 }
 /*************************
  * PROFILE CHECK
@@ -383,19 +391,18 @@ window.addEventListener("load", () => {
 }, 2000);
   }
 );
-
 const avatarMaleList = [
-  "images/avatars/male/m1.png",
-  "images/avatars/male/m2.png",
-  "images/avatars/male/m3.png",
-  "images/avatars/male/m4.png"
+  "/images/avatars/male/m1.png",
+  "/images/avatars/male/m2.png",
+  "/images/avatars/male/m3.png",
+  "/images/avatars/male/m4.png"
 ];
 
 const avatarFemaleList = [
-  "images/avatars/female/f1.png",
-  "images/avatars/female/f2.png",
-  "images/avatars/female/f3.png",
-  "images/avatars/female/f4.png"
+  "/images/avatars/female/f1.png",
+  "/images/avatars/female/f2.png",
+  "/images/avatars/female/f3.png",
+  "/images/avatars/female/f4.png"
 ];
 
 const avatarSelectHe = document.getElementById("avatarSelectHe");
@@ -406,6 +413,13 @@ function buildAvatarSelectors(){
   const savedHe = localStorage.getItem("avatarHe");
   const savedShe = localStorage.getItem("avatarShe");
 
+  // curăță dacă există deja
+  avatarSelectHe.innerHTML = "";
+  avatarSelectShe.innerHTML = "";
+
+  /***********************
+   AVATARS EL
+  ***********************/
   avatarMaleList.forEach(src => {
 
     const img = document.createElement("img");
@@ -420,8 +434,9 @@ function buildAvatarSelectors(){
 
       localStorage.setItem("avatarHe", src);
 
-      document.querySelectorAll("#avatarSelectHe .avatar-option")
-      .forEach(a => a.classList.remove("selected"));
+      document
+        .querySelectorAll("#avatarSelectHe .avatar-option")
+        .forEach(a => a.classList.remove("selected"));
 
       img.classList.add("selected");
 
@@ -433,6 +448,9 @@ function buildAvatarSelectors(){
   });
 
 
+  /***********************
+   AVATARS EA
+  ***********************/
   avatarFemaleList.forEach(src => {
 
     const img = document.createElement("img");
@@ -447,8 +465,9 @@ function buildAvatarSelectors(){
 
       localStorage.setItem("avatarShe", src);
 
-      document.querySelectorAll("#avatarSelectShe .avatar-option")
-      .forEach(a => a.classList.remove("selected"));
+      document
+        .querySelectorAll("#avatarSelectShe .avatar-option")
+        .forEach(a => a.classList.remove("selected"));
 
       img.classList.add("selected");
 
@@ -462,6 +481,9 @@ function buildAvatarSelectors(){
 }
 
 
+/***********************
+ GENERATE AVATAR API
+***********************/
 function generateAvatar(name, style="adventurer") {
 
   const seed = encodeURIComponent(name);
@@ -469,6 +491,3 @@ function generateAvatar(name, style="adventurer") {
   return `https://api.dicebear.com/7.x/${style}/svg?seed=${seed}`;
 
 }
-
-document.querySelectorAll(".avatar-option").forEach(a=>a.classList.remove("selected"));
-img.classList.add("selected");
