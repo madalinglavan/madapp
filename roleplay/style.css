@@ -358,3 +358,13 @@ body {
     letter-spacing: 2px;
   }
 }
+
+.option-card.selected{
+  animation: pulsePick 0.6s ease;
+}
+
+@keyframes pulsePick{
+  0%{transform:scale(0.9);}
+  60%{transform:scale(1.1);}
+  100%{transform:scale(1);}
+}

@@ -135,32 +135,64 @@ const storyContainer = document.getElementById("storyContainer");
 ************************************************/
 
 function renderStep() {
+
   const step = steps[currentStep];
 
   stepTitle.innerText = step.title;
   optionsContainer.innerHTML = "";
   nextBtn.classList.add("hidden");
 
-  data[step.key].forEach(option => {
-    const div = document.createElement("div");
-    div.classList.add("option-card");
-    div.innerText = option;
+  const randomBtn = document.createElement("button");
+  randomBtn.innerText = "🎲";
+  randomBtn.classList.add("next-btn");
 
-    div.onclick = () => {
-      document
-        .querySelectorAll(".option-card")
-        .forEach(c => c.classList.remove("selected"));
+  const resultCard = document.createElement("div");
+  resultCard.classList.add("option-card");
+  resultCard.style.fontSize = "18px";
+  resultCard.style.minHeight = "60px";
 
-      div.classList.add("selected");
-      selections[step.key] = option;
-      nextBtn.classList.remove("hidden");
-    };
+  optionsContainer.appendChild(resultCard);
+  optionsContainer.appendChild(randomBtn);
 
-    optionsContainer.appendChild(div);
-  });
+  randomBtn.onclick = () => {
+
+    const options = data[step.key];
+
+    let spinCount = 0;
+
+    const spin = setInterval(() => {
+
+      const random =
+        options[Math.floor(Math.random() * options.length)];
+
+      resultCard.innerText = random;
+
+      spinCount++;
+
+      if (spinCount > 15) {
+
+        clearInterval(spin);
+
+        const final =
+          options[Math.floor(Math.random() * options.length)];
+
+        resultCard.innerText = final;
+
+        resultCard.classList.add("selected");
+
+        selections[step.key] = final;
+
+        nextBtn.classList.remove("hidden");
+
+      }
+
+    }, 80);
+
+  };
 
   progress.style.width =
     (currentStep / steps.length) * 100 + "%";
+
 }
 
 /************************************************
@@ -335,16 +367,34 @@ window.addEventListener("load", () => {
 
 
 /*************************
- * AUTO FULLSCREEN
+ * AUTO FULLSCREEN SYSTEM
  *************************/
 
-function autoFullscreen() {
-  if (
-    localStorage.getItem("pb_fullscreen") === "true" &&
-    !document.fullscreenElement
-  ) {
-    document.documentElement.requestFullscreen().catch(() => {});
+function enterFullscreen() {
+
+  const el = document.documentElement;
+
+  if (el.requestFullscreen) {
+    el.requestFullscreen();
+  } else if (el.webkitRequestFullscreen) {
+    el.webkitRequestFullscreen();
+  } else if (el.msRequestFullscreen) {
+    el.msRequestFullscreen();
   }
+
 }
 
-document.addEventListener("DOMContentLoaded", autoFullscreen);
+function autoFullscreen() {
+
+  if (localStorage.getItem("pb_fullscreen") === "true") {
+
+    if (!document.fullscreenElement) {
+      enterFullscreen();
+    }
+
+  }
+
+}
+
+/* fullscreen pornește la primul click/touch */
+document.addEventListener("pointerdown", autoFullscreen, { once: true });
