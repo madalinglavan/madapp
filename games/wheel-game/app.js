@@ -50,12 +50,16 @@ const powerFill = document.getElementById("powerFill");
 /***********************
  * SOUND SYSTEM
  ***********************/
+const soundPointUp = new Audio("sounds/point_up.mp3");
+const soundPointDown = new Audio("sounds/point_down.mp3");
 const soundSpin = new Audio("sounds/spin.mp3");
 const soundTick = new Audio("sounds/tick.mp3");
 const soundCharge = new Audio("sounds/charge.mp3");
 const soundAccept = new Audio("sounds/accept.mp3");
 const soundReject = new Audio("sounds/reject.mp3");
 
+soundPointUp.volume = 0.7;
+soundPointDown.volume = 0.7;
 soundSpin.volume = 0.6;
 soundTick.volume = 0.4;
 soundCharge.volume = 0.3;
@@ -77,7 +81,9 @@ function unlockAudio() {
     soundTick,
     soundCharge,
     soundAccept,
-    soundReject
+    soundReject,
+    soundPointUp,
+    soundPointDown
   ];
 
   sounds.forEach(s => {
@@ -318,6 +324,13 @@ acceptBtn.onclick = () => {
   soundAccept.currentTime = 0;
   soundAccept.play().catch(()=>{});
 
+
+  // 🔊 sunet pentru punct câștigat
+  setTimeout(() => {
+    soundPointUp.currentTime = 0;
+    soundPointUp.play().catch(()=>{});
+  }, 2000);
+
   const stats = getStats();
 
   if (currentPlayer === "he") {
@@ -357,7 +370,13 @@ rejectBtn.onclick = () => {
   soundReject.currentTime = 0;
   soundReject.play().catch(()=>{});
 
+   // 🔊 sunet punct pierdut
+  setTimeout(() => {
+    soundPointDown.currentTime = 0;
+    soundPointDown.play().catch(()=>{});
+  }, 1000);
   const stats = getStats();
+
 
   const funnyReject = [
     "😅 Lașitate detectată!",
