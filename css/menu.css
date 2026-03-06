@@ -854,3 +854,30 @@ body.profile-lock .games-grid {
   box-shadow:
     0 0 20px rgba(255,92,92,.7);
 }
+
+.avatar-select{
+display:flex;
+flex-wrap:wrap;
+gap:10px;
+margin:10px 0;
+justify-content:center;
+}
+
+.avatar-option{
+width:55px;
+height:55px;
+border-radius:50%;
+cursor:pointer;
+border:3px solid transparent;
+transition:.2s;
+}
+
+.avatar-option:hover{
+transform:scale(1.1);
+}
+
+.avatar-option.selected{
+border:3px solid #ff3c78;
+box-shadow:0 0 10px #ff3c78;
+transform:scale(1.12);
+}

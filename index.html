@@ -58,14 +58,32 @@
 
 <!-- OVERLAY NUME CUPLU -->
 <div id="namesOverlay" class="overlay hidden">
+
   <div class="overlay-box">
+
     <h3>💖 Personalizare Cuplu</h3>
+
     <input type="text" id="nameHe" placeholder="Numele lui">
     <input type="text" id="nameShe" placeholder="Numele ei">
-    <input type="file" id="uploadHe" accept="image/*">
-    <input type="file" id="uploadShe" accept="image/*">
+
+
+
+    <div class="avatar-picker">
+
+      <p>Alege avatar pentru el</p>
+      <div id="avatarSelectHe" class="avatar-select"></div>
+      <input type="file" id="uploadHe" accept="image/*">
+
+      <p>Alege avatar pentru ea</p>
+      <div id="avatarSelectShe" class="avatar-select"></div>
+      <input type="file" id="uploadShe" accept="image/*">
+
+    </div>
+
     <button id="saveNames">Salvează</button>
+
   </div>
+
 </div>
 
 <div class="games-grid">

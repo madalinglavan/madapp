@@ -58,13 +58,26 @@ function updateGlobalUI() {
  * LOAD AVATARS
  *************************/
 function loadAvatars() {
-  const savedHe = localStorage.getItem("avatarHe");
-  const savedShe = localStorage.getItem("avatarShe");
 
-  if (savedHe && avatarHe) avatarHe.src = savedHe;
-  if (savedShe && avatarShe) avatarShe.src = savedShe;
+  const names = getCoupleNames();
+
+  let savedHe = localStorage.getItem("avatarHe");
+  let savedShe = localStorage.getItem("avatarShe");
+
+  if (!savedHe) {
+    savedHe = generateAvatar(names.he);
+    localStorage.setItem("avatarHe", savedHe);
+  }
+
+  if (!savedShe) {
+    savedShe = generateAvatar(names.she, "micah");
+    localStorage.setItem("avatarShe", savedShe);
+  }
+
+  if (avatarHe) avatarHe.src = savedHe;
+  if (avatarShe) avatarShe.src = savedShe;
+
 }
-
 /*************************
  * PROFILE CHECK
  *************************/
@@ -126,6 +139,7 @@ editBtn.onclick = () => {
 };
 
 saveBtn.onclick = () => {
+
   const heName = nameHeInput.value.trim();
   const sheName = nameSheInput.value.trim();
 
@@ -134,17 +148,19 @@ saveBtn.onclick = () => {
     return;
   }
 
-  const avatarHe = localStorage.getItem("avatarHe");
-  const avatarShe = localStorage.getItem("avatarShe");
-
-  if (!avatarHe || !avatarShe) {
-    alert("Adăugați ambele poze 🔥");
-    return;
-  }
-
   saveCoupleNames(heName, sheName);
+
+if (!localStorage.getItem("avatarHe")) {
+  localStorage.setItem("avatarHe", generateAvatar(heName));
+}
+
+if (!localStorage.getItem("avatarShe")) {
+  localStorage.setItem("avatarShe", generateAvatar(sheName,"micah"));
+}
+
   namesOverlay.classList.add("hidden");
   updateGlobalUI();
+
 };
 
 
@@ -337,7 +353,7 @@ gameCards.forEach(card => {
  * INIT APP
  *************************/
 function initApp() {
-
+buildAvatarSelectors();
   updateGlobalUI();
 
   if (!isProfileComplete()) {
@@ -368,4 +384,91 @@ window.addEventListener("load", () => {
   }
 );
 
+const avatarMaleList = [
+  "images/avatars/male/m1.png",
+  "images/avatars/male/m2.png",
+  "images/avatars/male/m3.png",
+  "images/avatars/male/m4.png"
+];
 
+const avatarFemaleList = [
+  "images/avatars/female/f1.png",
+  "images/avatars/female/f2.png",
+  "images/avatars/female/f3.png",
+  "images/avatars/female/f4.png"
+];
+
+const avatarSelectHe = document.getElementById("avatarSelectHe");
+const avatarSelectShe = document.getElementById("avatarSelectShe");
+
+function buildAvatarSelectors(){
+
+  const savedHe = localStorage.getItem("avatarHe");
+  const savedShe = localStorage.getItem("avatarShe");
+
+  avatarMaleList.forEach(src => {
+
+    const img = document.createElement("img");
+    img.src = src;
+    img.className = "avatar-option";
+
+    if(src === savedHe){
+      img.classList.add("selected");
+    }
+
+    img.onclick = () => {
+
+      localStorage.setItem("avatarHe", src);
+
+      document.querySelectorAll("#avatarSelectHe .avatar-option")
+      .forEach(a => a.classList.remove("selected"));
+
+      img.classList.add("selected");
+
+      loadAvatars();
+    };
+
+    avatarSelectHe.appendChild(img);
+
+  });
+
+
+  avatarFemaleList.forEach(src => {
+
+    const img = document.createElement("img");
+    img.src = src;
+    img.className = "avatar-option";
+
+    if(src === savedShe){
+      img.classList.add("selected");
+    }
+
+    img.onclick = () => {
+
+      localStorage.setItem("avatarShe", src);
+
+      document.querySelectorAll("#avatarSelectShe .avatar-option")
+      .forEach(a => a.classList.remove("selected"));
+
+      img.classList.add("selected");
+
+      loadAvatars();
+    };
+
+    avatarSelectShe.appendChild(img);
+
+  });
+
+}
+
+
+function generateAvatar(name, style="adventurer") {
+
+  const seed = encodeURIComponent(name);
+
+  return `https://api.dicebear.com/7.x/${style}/svg?seed=${seed}`;
+
+}
+
+document.querySelectorAll(".avatar-option").forEach(a=>a.classList.remove("selected"));
+img.classList.add("selected");
