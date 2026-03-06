@@ -335,34 +335,16 @@ window.addEventListener("load", () => {
 
 
 /*************************
- * AUTO FULLSCREEN SYSTEM
+ * AUTO FULLSCREEN
  *************************/
 
-function enterFullscreen() {
-
-  const el = document.documentElement;
-
-  if (el.requestFullscreen) {
-    el.requestFullscreen();
-  } else if (el.webkitRequestFullscreen) {
-    el.webkitRequestFullscreen();
-  } else if (el.msRequestFullscreen) {
-    el.msRequestFullscreen();
-  }
-
-}
-
 function autoFullscreen() {
-
-  if (localStorage.getItem("pb_fullscreen") === "true") {
-
-    if (!document.fullscreenElement) {
-      enterFullscreen();
-    }
-
+  if (
+    localStorage.getItem("pb_fullscreen") === "true" &&
+    !document.fullscreenElement
+  ) {
+    document.documentElement.requestFullscreen().catch(() => {});
   }
-
 }
 
-/* fullscreen pornește la primul click/touch */
-document.addEventListener("pointerdown", autoFullscreen, { once: true });
+document.addEventListener("DOMContentLoaded", autoFullscreen);
