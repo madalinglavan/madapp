@@ -137,27 +137,32 @@ function updateStatus() {
  * MOVE
  ***********************/
 function handleMove(e) {
-  
+
   if (!gameActive) return;
 
   const index = e.currentTarget.dataset.index;
   if (board[index]) return;
+
   soundMove.currentTime = 0;
   soundMove.play().catch(()=>{});
 
   board[index] = currentPlayer;
+
+  avatarReact(currentPlayer,"🎯");
+
   e.currentTarget.innerHTML = icons[currentPlayer];
   e.currentTarget.classList.add("used", currentPlayer);
 
   if (checkWin()) {
-  handleWin();
 
-  if (typeof addGlobalPoint === "function") {
-    addGlobalPoint(currentPlayer, "xo");
+    handleWin();
+
+    if (typeof addGlobalPoint === "function") {
+      addGlobalPoint(currentPlayer, "xo");
+    }
+
+    return;
   }
-
-  return;
-}
 
   if (board.every(Boolean)) {
     gameActive = false;
@@ -167,13 +172,27 @@ function handleMove(e) {
   }
 
   currentPlayer = currentPlayer === "he" ? "she" : "he";
-  updateStatus();
-}
 
+  updateStatus();
+  updateActivePlayerUI();
+
+}
 function handleWin() {
+
   soundWin.currentTime = 0;
-soundWin.play().catch(()=>{});
+  soundWin.play().catch(()=>{});
+
   gameActive = false;
+
+  // 👑 winner reaction
+  avatarReact(currentPlayer,"👑");
+
+  // 😅 loser reaction
+  const loser = currentPlayer === "he" ? "she" : "he";
+
+  setTimeout(()=>{
+    avatarReact(loser,"😅");
+  },300);
 
   const { he, she } = getCoupleNames();
   const winnerName = currentPlayer === "he" ? he : she;
@@ -182,6 +201,7 @@ soundWin.play().catch(()=>{});
 
   const stats = getStats();
   currentPlayer === "he" ? stats.he++ : stats.she++;
+
   saveStats(stats);
   updateScore();
 
@@ -193,8 +213,8 @@ soundWin.play().catch(()=>{});
   }, 900);
 
   restartBtn.classList.remove("hidden");
-}
 
+}
 
 /***********************
  * WIN CHECK
@@ -347,15 +367,45 @@ function updateActivePlayerUI(){
   const heItem = document.querySelector(".score-item.he");
   const sheItem = document.querySelector(".score-item.she");
 
+  const reactionHe = document.getElementById("reactionHe");
+  const reactionShe = document.getElementById("reactionShe");
+
   heItem.classList.remove("active");
   sheItem.classList.remove("active");
 
   if(currentPlayer === "he"){
+
     heItem.classList.add("active");
+
+    if(reactionHe) reactionHe.textContent = "❌";
+    if(reactionShe) reactionShe.textContent = "⭕";
+
   }else{
+
     sheItem.classList.add("active");
+
+    if(reactionHe) reactionHe.textContent = "❌";
+    if(reactionShe) reactionShe.textContent = "⭕";
+
   }
 
 }
 
+function avatarReact(player, emoji){
 
+  const el =
+    player === "he"
+      ? document.getElementById("reactionHe")
+      : document.getElementById("reactionShe");
+
+  if(!el) return;
+
+  el.textContent = emoji;
+
+  el.classList.add("show");
+
+  setTimeout(()=>{
+    el.classList.remove("show");
+  },1500);
+
+}
