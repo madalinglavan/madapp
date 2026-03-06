@@ -717,3 +717,26 @@ body {
   box-shadow:
     0 0 60px rgba(255,158,232,.8);
 }
+
+@keyframes avatarPulse{
+
+  0%{
+    transform:scale(1);
+    box-shadow:0 0 5px #ff3c78;
+  }
+
+  50%{
+    transform:scale(1.12);
+    box-shadow:0 0 20px #ff3c78;
+  }
+
+  100%{
+    transform:scale(1);
+    box-shadow:0 0 5px #ff3c78;
+  }
+
+}
+
+.score-item.active .avatar{
+  animation:avatarPulse 1.4s infinite;
+}

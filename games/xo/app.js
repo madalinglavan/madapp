@@ -4,11 +4,6 @@
 const avatarHe = document.getElementById("avatarHe");
 const avatarShe = document.getElementById("avatarShe");
 
-const savedHe = localStorage.getItem("avatarHe");
-const savedShe = localStorage.getItem("avatarShe");
-
-if (savedHe) avatarHe.src = savedHe;
-if (savedShe) avatarShe.src = savedShe;
 const boardEl = document.getElementById("board");
 const statusEl = document.getElementById("status");
 const restartBtn = document.getElementById("restartBtn");
@@ -31,6 +26,31 @@ const soundMove = new Audio("sounds/click.mp3");
 const soundWin = new Audio("sounds/win.mp3");
 const soundSwitch = new Audio("sounds/switch.mp3");
 const soundGift = new Audio("sounds/gift.mp3");
+
+soundMove.volume = 0.6;
+soundWin.volume = 0.7;
+soundSwitch.volume = 0.6;
+soundGift.volume = 0.7;
+
+function unlockAudio(){
+
+  const sounds = [
+    soundMove,
+    soundWin,
+    soundSwitch,
+    soundGift
+  ];
+
+  sounds.forEach(s => {
+    s.play().then(() => {
+      s.pause();
+      s.currentTime = 0;
+    }).catch(()=>{});
+  });
+
+}
+
+document.addEventListener("pointerdown", unlockAudio, { once:true });
 
 loadPlayerAvatars();
 
@@ -117,12 +137,13 @@ function updateStatus() {
  * MOVE
  ***********************/
 function handleMove(e) {
-  soundMove.currentTime = 0;
-  soundMove.play().catch(()=>{});
+  
   if (!gameActive) return;
 
   const index = e.currentTarget.dataset.index;
   if (board[index]) return;
+  soundMove.currentTime = 0;
+  soundMove.play().catch(()=>{});
 
   board[index] = currentPlayer;
   e.currentTarget.innerHTML = icons[currentPlayer];
@@ -234,7 +255,8 @@ closeGiftOverlay.onclick = () => {
  * SWITCH PLAYER
  ***********************/
 switchBtn.onclick = () => {
-
+    soundSwitch.currentTime = 0;
+soundSwitch.play().catch(()=>{});
   currentPlayer = currentPlayer === "he" ? "she" : "he";
 
   switchBtn.innerHTML =
@@ -335,3 +357,5 @@ function updateActivePlayerUI(){
   }
 
 }
+
+

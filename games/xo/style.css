@@ -619,3 +619,40 @@ body {
   40% { transform: scale(1.25); }
   100% { transform: scale(1.15); }
 }
+
+.score-item.active .avatar{
+  transform:scale(1.1);
+  box-shadow:0 0 15px #ff3c78;
+}
+@keyframes avatarPulse{
+
+  0%{
+    transform:scale(1);
+    box-shadow:0 0 5px #ff3c78;
+  }
+
+  50%{
+    transform:scale(1.12);
+    box-shadow:0 0 20px #ff3c78;
+  }
+
+  100%{
+    transform:scale(1);
+    box-shadow:0 0 5px #ff3c78;
+  }
+
+}
+
+.score-item.active .avatar{
+  animation:avatarPulse 1.4s infinite;
+}
+
+.cell i{
+  animation:popMark 0.25s ease;
+}
+
+@keyframes popMark{
+  0%{transform:scale(0.2);}
+  80%{transform:scale(1.2);}
+  100%{transform:scale(1);}
+}
