@@ -87,6 +87,30 @@ function loadAvatars() {
 
 }
 
+
+
+
+const avatarStartHe = document.getElementById("avatarStartHe");
+const avatarStartShe = document.getElementById("avatarStartShe");
+
+function loadStartAvatars(){
+
+  let savedHe = localStorage.getItem("avatarHe");
+  let savedShe = localStorage.getItem("avatarShe");
+
+  if(savedHe && !savedHe.startsWith("data:") && !savedHe.startsWith("http")){
+    savedHe = "../../" + savedHe;
+  }
+
+  if(savedShe && !savedShe.startsWith("data:") && !savedShe.startsWith("http")){
+    savedShe = "../../" + savedShe;
+  }
+
+  if(avatarStartHe) avatarStartHe.src = savedHe;
+  if(avatarStartShe) avatarStartShe.src = savedShe;
+
+}
+
 /***********************
  * SOUND SYSTEM
  ***********************/
@@ -542,11 +566,14 @@ window.addEventListener("load", () => {
 
   ensureNamesExist();
 loadAvatars();
+loadStartAvatars();
   setTimeout(() => {
     loader.style.display = "none";
     menu.style.display = "flex";
 
-    
+    loadStartAvatars();   // 🔥 ASTA LIPSEA
+
+    loadAvatars();
     updateScore();
     updateLeader();
     renderBoard();

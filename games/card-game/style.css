@@ -1366,3 +1366,35 @@ h1 span{
     letter-spacing: 2px;
   }
 }
+
+@keyframes avatarPulse{
+
+  0%{
+    transform:scale(1);
+    box-shadow:0 0 5px #ff3c78;
+  }
+
+  50%{
+    transform:scale(1.12);
+    box-shadow:0 0 20px #ff3c78;
+  }
+
+  100%{
+    transform:scale(1);
+    box-shadow:0 0 5px #ff3c78;
+  }
+
+}
+
+.score-item.active .avatar{
+  animation:avatarPulse 1.4s infinite;
+}
+
+.start-avatar{
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  object-fit:cover;
+  border:3px solid #ff3c78;
+  box-shadow:0 0 12px rgba(255,60,120,0.6);
+}
